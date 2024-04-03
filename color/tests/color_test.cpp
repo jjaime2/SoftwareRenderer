@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 TEST(ColorTest, HandlesDefaultConstruction) {
-  Color::RGBA rgba{};
+  Color::RGBAf rgba{};
   EXPECT_EQ(rgba.getRed(), 0.0)
       << "Color::RGBA red value not initialized to 0.0";
   EXPECT_EQ(rgba.getGreen(), 0.0)

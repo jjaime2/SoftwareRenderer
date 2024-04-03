@@ -28,6 +28,7 @@ if (PACKAGE_TESTS)
   include(GoogleTest)
 endif()
 
+add_subdirectory(common)
 add_subdirectory(extern/stb_image)
 add_subdirectory(color)
 add_subdirectory(graphics)

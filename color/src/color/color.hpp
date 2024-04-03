@@ -1,37 +1,44 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
+#include "common.hpp"
 #include <cmath>
 #include <ostream>
+#include <type_traits>
 
 namespace Color {
-class RGBA {
+
+template <typename T> class RGBA {
 private:
-  float r;
-  float g;
-  float b;
-  float a;
+  T r;
+  T g;
+  T b;
+  T a;
 
   void clamp() {
-    r = std::fmax(std::fmin(r, 1.0f), 0.0f);
-    g = std::fmax(std::fmin(g, 1.0f), 0.0f);
-    b = std::fmax(std::fmin(b, 1.0f), 0.0f);
-    a = std::fmax(std::fmin(a, 1.0f), 0.0f);
+    r = Common::max(Common::min(r, static_cast<T>(1)), static_cast<T>(0));
+    g = Common::max(Common::min(g, static_cast<T>(1)), static_cast<T>(0));
+    b = Common::max(Common::min(b, static_cast<T>(1)), static_cast<T>(0));
+    a = Common::max(Common::min(a, static_cast<T>(1)), static_cast<T>(0));
   }
 
 public:
   RGBA();
-  RGBA(float red, float green, float blue, float alpha);
+  RGBA(T red, T green, T blue);
+  RGBA(T red, T green, T blue, T alpha);
 
-  float getRed() const { return r; }
-  float getGreen() const { return g; }
-  float getBlue() const { return b; }
-  float getAlpha() const { return a; }
+  T getRed() const { return r; }
+  T getGreen() const { return g; }
+  T getBlue() const { return b; }
+  T getAlpha() const { return a; }
 
   friend std::ostream &operator<<(std::ostream &os, RGBA &rgba) {
     return os << "[" << rgba.r << ", " << rgba.g << ", " << rgba.b << ", "
               << rgba.a << "]";
   }
 };
+
+using RGBAf = RGBA<float>;
+using RGBAu = RGBA<uint8_t>;
 } // namespace Color
 #endif
