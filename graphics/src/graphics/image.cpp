@@ -12,7 +12,7 @@ using StbPtr = std::unique_ptr<stbi_uc, StbDeleter>;
 
 namespace Graphics {
 void Image::create(std::uint32_t height, std::uint32_t width,
-                   const Color::RGBAu &color) {
+                   const Color::RGBA &color) {
   std::vector<uint8_t> newPixels(static_cast<std::size_t>(width) *
                                  static_cast<std::size_t>(height) * 4);
 
@@ -26,7 +26,7 @@ void Image::create(std::uint32_t height, std::uint32_t width,
     *ptr++ = color.getAlpha();
   }
 
-  pixels.swap(newPixels);
+  this->pixels.swap(newPixels);
   this->height = height;
   this->width = width;
 }
@@ -97,7 +97,7 @@ bool Image::saveToFile(const std::filesystem::path &filename) const {
 std::uint32_t Image::getHeight() const { return this->height; }
 std::uint32_t Image::getWidth() const { return this->width; }
 
-void Image::setPixel(const Geometry::Pnt2u &coords, const Color::RGBAu &color) {
+void Image::setPixel(const Geometry::Pnt2u &coords, const Color::RGBA &color) {
   assert(coords.x < this->width &&
          "Image::setPixel() x coordinate is out of range");
   assert(coords.y < this->height &&
@@ -111,7 +111,7 @@ void Image::setPixel(const Geometry::Pnt2u &coords, const Color::RGBAu &color) {
   *pixel++ = color.getAlpha();
 }
 
-Color::RGBAu Image::getPixel(const Geometry::Pnt2u &coords) const {
+Color::RGBA Image::getPixel(const Geometry::Pnt2u &coords) const {
   assert(coords.x < this->width &&
          "Image::setPixel() x coordinate is out of range");
   assert(coords.y < this->height &&
@@ -119,7 +119,7 @@ Color::RGBAu Image::getPixel(const Geometry::Pnt2u &coords) const {
 
   const auto index = (coords.x + coords.y * this->width) * 4;
   const std::uint8_t *pixel = &this->pixels[index];
-  return Color::RGBAu(pixel[0], pixel[1], pixel[2], pixel[3]);
+  return Color::RGBA(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
 void Image::flipHorizontally() {

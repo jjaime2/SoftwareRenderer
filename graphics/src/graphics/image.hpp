@@ -4,7 +4,6 @@
 #include "point2.hpp"
 #include <cstdint>
 #include <filesystem>
-#include <optional>
 #include <vector>
 
 namespace Graphics {
@@ -17,7 +16,7 @@ private:
 
 public:
   void create(std::uint32_t height, std::uint32_t width,
-              const Color::RGBAu &color);
+              const Color::RGBA &color);
   void create(std::uint32_t height, std::uint32_t width, const uint8_t *pixels);
   [[nodiscard]] bool loadFromFile(const std::filesystem::path &filename);
   // [[nodiscard]] bool loadFromMemory(const void *data, std::size_t size);
@@ -27,8 +26,8 @@ public:
 
   std::uint32_t getHeight() const;
   std::uint32_t getWidth() const;
-  void setPixel(const Geometry::Pnt2u &coords, const Color::RGBAu &color);
-  Color::RGBAu getPixel(const Geometry::Pnt2u &coords) const;
+  void setPixel(const Geometry::Pnt2u &coords, const Color::RGBA &color);
+  Color::RGBA getPixel(const Geometry::Pnt2u &coords) const;
   void flipHorizontally();
   void flipVertically();
 };
