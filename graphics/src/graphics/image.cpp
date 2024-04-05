@@ -97,28 +97,28 @@ bool Image::saveToFile(const std::filesystem::path &filename) const {
 std::uint32_t Image::getHeight() const { return this->height; }
 std::uint32_t Image::getWidth() const { return this->width; }
 
-void Image::setPixel(const Geometry::Pnt2u &coords, const Color::RGBA &color) {
-  assert(coords.x < this->width &&
+void Image::setPixel(const Geometry::Pnt2i &coords, const Color::RGBA &color) {
+  assert(coords.x <= static_cast<int>(this->width) &&
          "Image::setPixel() x coordinate is out of range");
-  assert(coords.y < this->height &&
+  assert(coords.y <= static_cast<int>(this->height) &&
          "Image::setPixel() y coordinate is out of range");
 
-  const auto index = (coords.x + coords.y * this->width) * 4;
-  std::uint8_t *pixel = &this->pixels[index];
+  const auto index = (coords.x + coords.y * static_cast<int>(this->width)) * 4;
+  std::uint8_t *pixel = &this->pixels[static_cast<std::size_t>(index)];
   *pixel++ = color.getRed();
   *pixel++ = color.getGreen();
   *pixel++ = color.getBlue();
   *pixel++ = color.getAlpha();
 }
 
-Color::RGBA Image::getPixel(const Geometry::Pnt2u &coords) const {
-  assert(coords.x < this->width &&
+Color::RGBA Image::getPixel(const Geometry::Pnt2i &coords) const {
+  assert(coords.x <= static_cast<int>(this->width) &&
          "Image::setPixel() x coordinate is out of range");
-  assert(coords.y < this->height &&
+  assert(coords.y <= static_cast<int>(this->height) &&
          "Image::setPixel() y coordinate is out of range");
 
-  const auto index = (coords.x + coords.y * this->width) * 4;
-  const std::uint8_t *pixel = &this->pixels[index];
+  const auto index = (coords.x + coords.y * static_cast<int>(this->width)) * 4;
+  const std::uint8_t *pixel = &this->pixels[static_cast<std::size_t>(index)];
   return Color::RGBA(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
@@ -160,6 +160,22 @@ void Image::flipVertically() {
 
       top += rowSize;
       bottom -= rowSize;
+    }
+  }
+}
+
+void Image::drawLine(Geometry::Pnt2i p1, Geometry::Pnt2i p2,
+                     const Color::RGBA &color) {
+  int m_new = 2 * (p2.y - p1.y);
+  int slope_error_new = m_new - (p2.x - p1.x);
+  for (int x = p1.x, y = p1.y; x <= p2.x; x++) {
+    setPixel(Geometry::Pnt2i(x, y), color);
+
+    slope_error_new += m_new;
+
+    if (slope_error_new >= 0) {
+      y++;
+      slope_error_new -= 2 * (p2.x - p1.x);
     }
   }
 }
