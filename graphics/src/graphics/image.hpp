@@ -2,6 +2,7 @@
 
 #include "color.hpp"
 #include "point2.hpp"
+#include "triangle.hpp"
 #include <cstdint>
 #include <filesystem>
 #include <vector>
@@ -28,9 +29,11 @@ public:
   std::uint32_t getWidth() const;
   void setPixel(const Geometry::Pnt2i &coords, const Color::RGBA &color);
   Color::RGBA getPixel(const Geometry::Pnt2i &coords) const;
+  void fill(const Color::RGBA &color);
   void flipHorizontally();
   void flipVertically();
   void drawLine(Geometry::Pnt2i p1, Geometry::Pnt2i p2,
                 const Color::RGBA &color);
+  void drawTriangle(Geometry::Tri2i t, const Color::RGBA &color);
 };
 } // namespace Graphics

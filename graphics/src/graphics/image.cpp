@@ -122,6 +122,14 @@ Color::RGBA Image::getPixel(const Geometry::Pnt2i &coords) const {
   return Color::RGBA(pixel[0], pixel[1], pixel[2], pixel[3]);
 }
 
+void Image::fill(const Color::RGBA &color) {
+  for (int row{0}; row < static_cast<int>(height); ++row) {
+    for (int col{0}; col < static_cast<int>(width); ++col) {
+      setPixel(Geometry::Pnt2i(row, col), color);
+    }
+  }
+}
+
 void Image::flipHorizontally() {
   if (!this->pixels.empty()) {
     const std::size_t rowSize = this->width * 4;
@@ -166,17 +174,34 @@ void Image::flipVertically() {
 
 void Image::drawLine(Geometry::Pnt2i p1, Geometry::Pnt2i p2,
                      const Color::RGBA &color) {
-  int m_new = 2 * (p2.y - p1.y);
-  int slope_error_new = m_new - (p2.x - p1.x);
-  for (int x = p1.x, y = p1.y; x <= p2.x; x++) {
+
+  int x{p1.x};
+  int y{p1.y};
+  int dx = abs(p2.x - p1.x), sx = p1.x < p2.x ? 1 : -1;
+  int dy = -abs(p2.y - p1.y), sy = p1.y < p2.y ? 1 : -1;
+  int err = dx + dy, e2; /* error value e_xy */
+
+  while (true) { /* loop */
     setPixel(Geometry::Pnt2i(x, y), color);
-
-    slope_error_new += m_new;
-
-    if (slope_error_new >= 0) {
-      y++;
-      slope_error_new -= 2 * (p2.x - p1.x);
+    if (x == p2.x && y == p2.y) {
+      break;
     }
+
+    e2 = 2 * err;
+    if (e2 >= dy) {
+      err += dy;
+      x += sx;
+    } /* e_xy+e_x > 0 */
+    if (e2 <= dx) {
+      err += dx;
+      y += sy;
+    } /* e_xy+e_y < 0 */
   }
+}
+
+void Image::drawTriangle(Geometry::Tri2i t, const Color::RGBA &color) {
+  drawLine(t.p1, t.p2, color);
+  drawLine(t.p2, t.p3, color);
+  drawLine(t.p3, t.p1, color);
 }
 } // namespace Graphics

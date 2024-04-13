@@ -8,8 +8,8 @@ set(
   "src/geometry/point2.cpp"
   # "src/geometry/linesegment3.cpp"
   # "src/geometry/circle.cpp"
-  # "src/geometry/triangle.cpp"
-  # "src/geometry/boundingbox3.cpp"
+  "src/geometry/triangle.cpp"
+  "src/geometry/boundingbox2.cpp"
 )
 set(
   GEOMETRY_HEADERS
@@ -19,8 +19,8 @@ set(
   "src/geometry/point2.hpp"
   # "src/geometry/linesegment3.hpp"
   # "src/geometry/circle.hpp"
-  # "src/geometry/triangle.hpp"
-  # "src/geometry/boundingbox3.hpp"
+  "src/geometry/triangle.hpp"
+  "src/geometry/boundingbox2.hpp"
   # "src/geometry/shape.hpp"
 )
 add_library(geometry STATIC ${GEOMETRY_SOURCES} ${GEOMETRY_HEADERS})
